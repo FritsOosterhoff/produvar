@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Produvar demo project</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+
+  <div>
+    <h2>Op welke browser zit je?</h2>
+
+    <ul>
+      <li id="0">Chrome</li>
+      <li id="1">Firefox</li>
+      <li id="2">Safari</li>
+      <li id="3">Edge</li>
+    </ul>
+  </div>
+
+  <script>
+  var ws = new WebSocket('ws://localhost:1234', 'echo-protocol');
+  console.log(ws);
+
+  ws.onmessage = function(response){
+    console.log(response.data);
+    var element = document.getElementById(response.data);
+    element.classList.toggle("active");
+    element.style.background = '#c3c3c3';
+
+    setTimeout( function(){
+      element.classList.toggle("active");
+      element.style.background = '#fff';
+    }, 3000);
+
+  }
+
+  ws.onopen = function(){
+    document.querySelector('ul').addEventListener("click", function(event){
+      console.log(event.target.id);
+      ws.send(event.target.id);
+    });
+  }
+
+
+  </script>
+
+
+</body>
+</html>
